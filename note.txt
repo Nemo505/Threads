@@ -1,0 +1,11 @@
+migration
+    bin/cake bake migration create_users
+    bin/cake bake migrations migrate
+model 
+    bin/cake bake model MyModelName (camel case)
+Controller
+    bin/cake bake controller Articles
+
+
+use all
+    bin\cake bake all users
