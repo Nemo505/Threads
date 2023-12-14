@@ -9,3 +9,11 @@ Controller
 
 use all
     bin\cake bake all users
+
+authen php8.1, cake4.5
+    composer require cakephp/authentication:^2.6
+
+#hashpasswrod 
+
+tailwindCss
+    npx tailwindcss -i ./webroot/css/input.css -o ./webroot/css/output.css --watch

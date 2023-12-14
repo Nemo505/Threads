@@ -22,6 +22,11 @@ class User extends AbstractMigration
             'null' => false,
         ]);
 
+        $userTable->addColumn('email', 'string', [
+            'default' => null,
+            'null' => false,
+        ]);
+
         $userTable->addColumn('password', 'string', [
             'default' => null,
             'null' => false,
