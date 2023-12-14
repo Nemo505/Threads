@@ -80,7 +80,7 @@ $cakeDescription = 'Cake';
 
     
 </head>
-    <body class=" bg-green-500">
+    <body class=" bg-gradient-to-r from-yellow-500 via-green-500 to-yellow-500">
 
     <!-- Christmas decorations -->
      <div class="absolute top-0 right-0 h-full flex items-center justify-center pointer-events-none">
@@ -89,16 +89,14 @@ $cakeDescription = 'Cake';
     </div>
 
         <!-- Christmas navbar -->
-    <nav class="bg-green-700 p-4">
+    <nav class="bg-gradient-to-r from-red-500 via-green-700 to-red-500 p-4">
         <div class="container mx-auto flex justify-between items-center">
 
             <!-- Logo or brand -->
             <a href="#" class="text-white text-2xl font-semibold">
-                <img src="https://i.pinimg.com/originals/f9/f9/d0/f9f9d087599c729d158bb4a68c75ae45.png" alt="Christmas Logo" class="h-8 mr-2 inline">
-                Christmas Site
+                <img src="https://img1.pnghut.com/12/11/16/3wQMsha9S4/christmas-tree-fir-santa-claus-s-reindeer-jingle-bell-gift.jpg" alt="Christmas Logo" class="h-8 mr-2 inline">
+                Christmas ChatBot
             </a>
-
-
         </div>
     </nav>
 
