@@ -14,7 +14,7 @@
  * @var \App\View\AppView $this
  */
 
-$cakeDescription = 'CakePHP: the rapid development php framework';
+$cakeDescription = 'Cake';
 ?>
 <!DOCTYPE html>
 <html>
@@ -27,26 +27,86 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     </title>
     <?= $this->Html->meta('icon') ?>
 
-    <?= $this->Html->css(['normalize.min', 'milligram.min', 'fonts', 'cake']) ?>
+    <?= $this->Html->css(['normalize.min', 'milligram.min', 'fonts', 'cake', 'output']) ?>
 
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
     <?= $this->fetch('script') ?>
+
+    <!-- Add the following CSS for snowfall effect -->
+    <style>
+        body {
+            overflow: hidden; /* Hide overflowing snowflakes */
+        }
+
+        snowflake {
+            position: absolute;
+            animation: fall linear infinite;
+            transform-origin: 50% 50%;
+            display: inline-block;
+            font-size: 20px;
+            color: #fff;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh);
+            }
+        }
+    </style>
+
+    <!-- Add the following script for generating snowflakes -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Number of snowflakes
+            var numSnowflakes = 10;
+
+            // Function to create a snowflake element
+            function createSnowflake() {
+                var snowflake = document.createElement('snowflake');
+                snowflake.innerHTML = '🍰'; // Unicode snowflake character
+                snowflake.style.top = -20 + 'px'; // Set the initial position above the viewport
+                snowflake.style.left = Math.random() * window.innerWidth + 'px';
+                snowflake.style.animationDuration = (Math.random() * 9 + 1) + 's'; // Vary animation duration
+                document.body.appendChild(snowflake);
+            }
+
+            // Create the specified number of snowflakes
+            for (var i = 0; i < numSnowflakes; i++) {
+                createSnowflake();
+            }
+        });
+    </script>
+
+    
 </head>
-<body>
-    <nav class="top-nav">
-        <div class="top-nav-title">
-            <a href="<?= $this->Url->build('/') ?>"><span>Cake</span>PHP</a>
-        </div>
-        <div class="top-nav-links">
-            <a target="_blank" rel="noopener" href="https://book.cakephp.org/4/">Documentation</a>
-            <a target="_blank" rel="noopener" href="https://api.cakephp.org/">API</a>
+    <body class=" bg-green-500">
+
+    <!-- Christmas decorations -->
+     <div class="absolute top-0 right-0 h-full flex items-center justify-center pointer-events-none">
+        <img src="https://i.pinimg.com/originals/f9/f9/d0/f9f9d087599c729d158bb4a68c75ae45.png" alt="Christmas Tree" class="h-full">
+        <!-- Add more images or icons for decorations -->
+    </div>
+
+        <!-- Christmas navbar -->
+    <nav class="bg-green-700 p-4">
+        <div class="container mx-auto flex justify-between items-center">
+
+            <!-- Logo or brand -->
+            <a href="#" class="text-white text-2xl font-semibold">
+                <img src="https://i.pinimg.com/originals/f9/f9/d0/f9f9d087599c729d158bb4a68c75ae45.png" alt="Christmas Logo" class="h-8 mr-2 inline">
+                Christmas Site
+            </a>
+
+
         </div>
     </nav>
-    <main class="main">
+
+    <main class="main mt-2">
         <div class="container">
             <?= $this->Flash->render() ?>
             <?= $this->fetch('content') ?>
+  
         </div>
     </main>
     <footer>
