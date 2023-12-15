@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 use Migrations\AbstractMigration;
 
-class User extends AbstractMigration
+class CreateUsers extends AbstractMigration
 {
     /**
      * Change Method.

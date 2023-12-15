@@ -19,12 +19,16 @@
             <h3><?= h($user->name) ?></h3>
             <table>
                 <tr>
+                    <th><?= __('Id') ?></th>
+                    <td><?= $this->Number->format($user->id) ?></td>
+                </tr>
+                <tr>
                     <th><?= __('Name') ?></th>
                     <td><?= h($user->name) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Id') ?></th>
-                    <td><?= $this->Number->format($user->id) ?></td>
+                    <th><?= __('Email') ?></th>
+                    <td><?= h($user->email) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Created') ?></th>

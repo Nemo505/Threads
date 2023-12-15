@@ -58,6 +58,7 @@ return function (RouteBuilder $routes): void {
         $builder->connect('/', ['controller' => 'Pages', 'action' => 'display', 'chat']);
         // routes.php
         $builder->connect('/users', ['controller' => 'Users', 'action' => 'index']);
+        $builder->connect('/users/threads', ['controller' => 'Threads', 'action' => 'index']);
 
 
         /*

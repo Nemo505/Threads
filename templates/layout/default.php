@@ -93,12 +93,19 @@ $cakeDescription = 'Cake';
         <div class="container mx-auto flex justify-between items-center">
 
             <!-- Logo or brand -->
-            <a href="#" class="text-white text-2xl font-semibold">
+            <a href="#" class="text-white text-2xl font-semibold flex items-center">
                 <img src="https://img1.pnghut.com/12/11/16/3wQMsha9S4/christmas-tree-fir-santa-claus-s-reindeer-jingle-bell-gift.jpg" alt="Christmas Logo" class="h-8 mr-2 inline">
                 Christmas ChatBot
             </a>
+
+            <!-- Logout button -->
+            <form action="<?= $this->Url->build(['controller' => 'Users', 'action' => 'logout']) ?>" method="post">
+                <?= $this->Form->button(__('Logout'), ['type' => 'submit', 'class' => 'px-2 text-white hover:text-gray-300']); ?>
+            </form>
+
         </div>
     </nav>
+
 
     <main class="main mt-2">
         <div class="container">
