@@ -56,6 +56,7 @@ $cakeDescription = 'Cake';
         }
     </style>
 
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <!-- Add the following script for generating snowflakes -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -118,4 +119,5 @@ $cakeDescription = 'Cake';
     <footer>
     </footer>
 </body>
+
 </html>

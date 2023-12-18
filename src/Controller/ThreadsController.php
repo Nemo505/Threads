@@ -19,11 +19,14 @@ class ThreadsController extends AppController
         // Load the Users model
         $this->loadModel('Posts');
 
-        $postsData = $this->Posts->find()
-            ->contain(['Users']);
+        $posts = $this->Posts->find()
+            ->contain(['Users'])
+            ->order(['posts.created' => 'DESC']);
+        
+        $user = $this->Authentication->getIdentity();
+        $userId = $user->get('id');
 
-        // Pass data to the view
-        $this->set('posts', $postsData);
+        $this->set(compact('posts', 'userId'));
     }
 
     /**
@@ -42,48 +45,42 @@ class ThreadsController extends AppController
         $this->set(compact('thread'));
     }
 
-    /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
-     */
-    public function add()
-    {
-        $thread = $this->Threads->newEmptyEntity();
-        if ($this->request->is('post')) {
-            $thread = $this->Threads->patchEntity($thread, $this->request->getData());
-            if ($this->Threads->save($thread)) {
-                $this->Flash->success(__('The thread has been saved.'));
+    public function toggleLike() {
+        $this->autoRender = false;
+        $this->request->allowMethod(['post']);
+        
+        $postId = $this->request->getData('postId');
+        
+        $user = $this->Authentication->getIdentity();
+        $userId = $user->get('id');
 
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The thread could not be saved. Please, try again.'));
-        }
-        $this->set(compact('thread'));
-    }
 
-    /**
-     * Edit method
-     *
-     * @param string|null $id Thread id.
-     * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function edit($id = null)
-    {
-        $thread = $this->Threads->get($id, [
-            'contain' => [],
+        $this->loadModel('Likes');
+        $isLiked = $this->Likes->find()
+                        ->where(['post_id' => $postId, 'user_id' => $userId])
+                        ->first();
+        $isLiked !== null;
+
+        $like = $this->Likes->newEntity([
+            'post_id' => $postId,
+            'user_id' => $userId,
         ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $thread = $this->Threads->patchEntity($thread, $this->request->getData());
-            if ($this->Threads->save($thread)) {
-                $this->Flash->success(__('The thread has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+        if (!$isLiked) {
+            $this->Likes->save($like);
+        } else {
+            // Find and delete the like based on the post and user
+            $existingLike = $this->Likes->find()
+                ->where(['post_id' => $postId, 'user_id' => $userId])
+                ->first();
+
+            if ($existingLike) {
+                $this->Likes->delete($existingLike);
             }
-            $this->Flash->error(__('The thread could not be saved. Please, try again.'));
         }
-        $this->set(compact('thread'));
+        
+        $response = ['status' => 'success', 'message' => 'Liked status saved', 'isLiked' => $isLiked,];
+        echo json_encode($response);
     }
 
    

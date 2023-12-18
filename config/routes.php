@@ -59,6 +59,7 @@ return function (RouteBuilder $routes): void {
         // routes.php
         $builder->connect('/users', ['controller' => 'Users', 'action' => 'index']);
         $builder->connect('/users/threads', ['controller' => 'Threads', 'action' => 'index']);
+        $builder->connect('/users/threads/like', ['controller' => 'Threads', 'action' => 'toggleLike']);
 
 
         /*
