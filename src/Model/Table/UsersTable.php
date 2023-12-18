@@ -44,6 +44,8 @@ class UsersTable extends Table
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
+
+        $this->hasMany('Posts');
     }
 
     /**
@@ -73,4 +75,5 @@ class UsersTable extends Table
 
         return $validator;
     }
+    
 }

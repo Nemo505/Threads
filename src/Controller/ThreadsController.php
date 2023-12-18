@@ -19,8 +19,8 @@ class ThreadsController extends AppController
         // Load the Users model
         $this->loadModel('Posts');
 
-        // Fetch data from the Users model
-        $postsData = $this->Posts->find('all');
+        $postsData = $this->Posts->find()
+            ->contain(['Users']);
 
         // Pass data to the view
         $this->set('posts', $postsData);

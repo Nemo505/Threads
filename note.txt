@@ -47,3 +47,27 @@ controller with no table, just for view
 _________________________________________________
  Error SQLSTATE[HY000]: General error: 1364 Field 'created' doesn't have a default value 
     $this->addBehavior('Timestamp');
+
+adding fontawesome
+    webroot/css/fontawesome.min.css
+    webroot/script/all.js
+    webroot/webfonts
+
+    <?= $this->Html->css(['normalize.min', 'milligram.min', 'fonts', 'cake', 'output', 'fontawesome.min']) ?>
+    <?= $this->Html->script('all.js') ?>
+
+What is alias 
+    # In a controller or Table class
+    $this->loadModel('Users'); // Load the UsersTable
+    $this->Users->alias('Members'); // Set the alias to 'Members'
+
+    # Now you can use the alias in your code
+    $members = $this->Members->find('all');
+
+relationship
+    ->one to many 
+    $this->belongsTo('Users', [
+            'foreignKey' => 'user_id',
+        ]);
+    $this->hasMany('Posts');
+

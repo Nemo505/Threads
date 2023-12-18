@@ -43,10 +43,11 @@ class PostsTable extends Table
         $this->setDisplayField('title');
         $this->setPrimaryKey('id');
 
+        $this->addBehavior('Timestamp');
+        
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id',
         ]);
-        $this->addBehavior('Timestamp');
     }
 
     /**
@@ -88,4 +89,6 @@ class PostsTable extends Table
 
         return $rules;
     }
+
+    
 }

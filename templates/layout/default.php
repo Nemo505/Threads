@@ -27,7 +27,8 @@ $cakeDescription = 'Cake';
     </title>
     <?= $this->Html->meta('icon') ?>
 
-    <?= $this->Html->css(['normalize.min', 'milligram.min', 'fonts', 'cake', 'output']) ?>
+    <?= $this->Html->css(['normalize.min', 'milligram.min', 'fonts', 'cake', 'output', 'fontawesome.min']) ?>
+    <?= $this->Html->script('all.js') ?>
 
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
