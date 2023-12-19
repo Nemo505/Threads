@@ -42,22 +42,37 @@
 
 <script>
     function toggleLike(element, postId) {
-        var isLiked = <?= $liked ? 'true' : 'false' ?>;
+        var icon = element.firstChild;
+        
         $.ajax({
             url: '/users/threads/like', 
             method: 'POST',
             data: { postId: postId },
+            cache: false,
             success: function(response) {
                if (response) {
+                    var isSolid = icon.classList.contains('fa-solid');
 
-                   // Change the icon based on the updated like status
-                   if (isLiked == "false") {
-                       element.innerHTML = '<i class="fa-solid fa-thumbs-up"></i>';
-                   } else {
-                       element.innerHTML = '<i class="fa-regular fa-thumbs-up"></i>';
-                   }
+                    // Update the icon based on the response
+                    if (response === "null") {
+                        if (isSolid) {
+                            icon.classList.remove('fa-solid');
+                            icon.classList.add('fa-regular');
+                        } else {
+                            icon.classList.add('fa-solid');
+                            icon.classList.remove('fa-regular');
+                        }
+                    } else {
 
-                   isLiked != isLiked;
+                        if (isSolid) {
+                            icon.classList.add('fa-solid');
+                            icon.classList.remove('fa-regular');
+                        } else {
+                            icon.classList.remove('fa-solid');
+                            icon.classList.add('fa-regular');
+                        }
+                    }
+                   
                }
             },
             error: function(error) {
@@ -74,5 +89,4 @@
         // Your logic for toggling shares and changing the icon
     }
 </script>
-
 

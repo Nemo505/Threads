@@ -59,7 +59,6 @@ class ThreadsController extends AppController
         $isLiked = $this->Likes->find()
                         ->where(['post_id' => $postId, 'user_id' => $userId])
                         ->first();
-        $isLiked !== null;
 
         $like = $this->Likes->newEntity([
             'post_id' => $postId,
@@ -79,7 +78,7 @@ class ThreadsController extends AppController
             }
         }
         
-        $response = ['status' => 'success', 'message' => 'Liked status saved', 'isLiked' => $isLiked,];
+        $response =  $isLiked;
         echo json_encode($response);
     }
 
