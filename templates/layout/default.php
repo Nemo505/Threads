@@ -57,6 +57,7 @@ $cakeDescription = 'Cake';
     </style>
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="../node_modules/preline/dist/preline.js"></script>
     <!-- Add the following script for generating snowflakes -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
