@@ -81,41 +81,105 @@
                     <span class="mr-4 cursor-pointer"><i class="fa-regular fa-comment"></i></span>
                     <span class="mr-4 cursor-pointer" onclick="toggleShare(this)"><i class="fa-solid fa-share"></i></span>
                 </div>
+                <!-- Comments Section -->
+                <div id="comments-container">
 
-                   <!-- Comments Section -->
-                <div class="bg-dark-100 text-white py-4 px-6">
-
-                  <div class="flex items-center">
-                      <img src="https://i.pinimg.com/originals/16/cf/43/16cf43ed08453f58b17e7c126e714a99.jpg" alt="Bot Avatar" class="h-10 w-10 rounded-full mr-3 border-2 border-white" />
-                      <h6 class="text-lg font-semibold text-black">User</h6>
-                  </div>
-
-                  <p class="text-gray-600 dark:text-gray-300">This is a great comment! Keep up the good work.</p>
-                  <!-- Icons for Like, Reply -->
-                  <div class="flex items-center mt-4 space-x-4">
-                      <span class="cursor-pointer" onclick="toggleLike(this, 1)"><i class="fa-solid fa-thumbs-up text-blue-500"></i> Like</span>
-                      <span class="cursor-pointer"><i class="fa-regular fa-comment text-gray-500"></i> Reply</span>
-                  </div>
+                  
                 </div>
 
-              <div class="p-4 border-t dark:border-gray-700 flex items-center ">
-                  <input type="text" placeholder="Type your message..." class="flex-1 py-2 px-3 rounded-md focus:outline-none focus:shadow-outline-red text-normal" />
-                  <button class="ml-2 bg-gradient-to-r from-red-500 to-red-300 hover:bg-[#fb7185] text-white py-2 px-4 rounded-md">Send</button>  
-              </div>
+                <form id="commentForm" >
+                  <input type="hidden" name="post_id" id="comment-modal-id">
+                  <div class="p-4 border-t dark:border-gray-700 flex items-center ">
+                      <input type="text" placeholder="Type your message..." name="comment" class="flex-1 py-2 px-3 rounded-md focus:outline-none focus:shadow-outline-red text-normal" />
+                      <button class="ml-2 bg-gradient-to-r from-red-500 to-red-300 hover:bg-[#fb7185] text-white py-2 px-4 rounded-md" id="saveComment">Send</button>  
+                  </div>
+                </form>
 
             </div>
 
 
         </div>
       </div>
-      <div class="flex justify-end items-center gap-x-2 py-3 px-4 border-t dark:border-gray-700">
-        <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" data-hs-overlay="#hs-scroll-inside-body-modal">
-          Close
-        </button>
-      </div>
     </div>
   </div>
 </div>
+
+<script>
+    $(document).ready(function() {
+        $("#saveComment").on("click", function(event) {
+            event.preventDefault(); // Prevent the default form submission behavior
+            var formData = $("#commentForm").serialize();
+            $.ajax({
+                method: 'POST',
+                url: '/users/threads/comment',
+                data: formData,
+                success: function(response) {
+                    if (response) {
+                        console.log("Post saved successfully!");
+                    } else {
+                        alert("Error saving post!");
+                    }
+                },
+                error: function() {
+                    alert("AJAX request failed!");
+                }
+            });
+        });
+    });
+</script>
+
+
+<script>
+    function toggleComment(element, postId) {
+        // Retrieve data attributes from the clicked element
+        var title = element.dataset.commentTitle;
+        var name = element.dataset.commentName;
+        var content = element.dataset.commentContent;
+
+        // Update the modal content dynamically
+        document.getElementById('comment-modal-title').innerText = title;
+        document.getElementById('comment-modal-name').innerText = name;
+        document.getElementById('comment-modal-content').innerText = content;
+        document.getElementById('comment-modal-id').value = postId;
+
+        // Load comments dynamically using AJAX
+        $.ajax({
+            url: '/users/threads/get-comments', // Replace with your actual endpoint
+            method: 'GET',
+            data: { postId: postId },
+            cache: false,
+            success: function(response) {
+                if (response.length > 0) {
+                    // Clear existing comments
+                    var commentsContainer = document.getElementById('comments-container');
+                    commentsContainer.innerHTML = '';
+
+                    // Loop through comments and append them to the container
+                    response.forEach(function(comment) {
+                        var commentHtml = `
+                            <div class="bg-dark-100 text-white py-4 px-6">
+                                <div class="flex items-center">
+                                    <img src="${comment.user_avatar}" alt="${comment.user_name} Avatar" class="h-10 w-10 rounded-full mr-3 border-2 border-white" />
+                                    <h6 class="text-lg font-semibold text-black">${comment.user_name}</h6>
+                                </div>
+                                <p class="text-gray-600 dark:text-gray-300">${comment.content}</p>
+                                <div class="flex items-center mt-4 space-x-4">
+                                    <span class="cursor-pointer" onclick="toggleLike(this, ${comment.id})"><i class="fa-solid fa-thumbs-up text-blue-500"></i> Like</span>
+                                    <span class="cursor-pointer"><i class="fa-regular fa-comment text-gray-500"></i> Reply</span>
+                                </div>
+                            </div>
+                        `;
+                        commentsContainer.innerHTML += commentHtml;
+                    });
+                }
+            },
+            error: function(error) {
+                console.error(error);
+            }
+        });
+
+    }
+</script>
 
 <script>
     function toggleLike(element, postId) {
@@ -158,24 +222,6 @@
         });
     }
 
-</script>
-
-<script>
-    function toggleComment(element, postId) {
-        // Retrieve data attributes from the clicked element
-        var title = element.dataset.commentTitle;
-        var name = element.dataset.commentName;
-        var content = element.dataset.commentContent;
-
-        // Update the modal content dynamically
-        document.getElementById('comment-modal-title').innerText = title;
-        document.getElementById('comment-modal-name').innerText = name;
-        document.getElementById('comment-modal-content').innerText = content;
-
-        // Open the modal
-        // Your existing modal toggle logic here
-        // ...
-    }
 </script>
 
 

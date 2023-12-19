@@ -71,3 +71,7 @@ relationship
         ]);
     $this->hasMany('Posts');
 
+_________________________________________________
+$this->request->getData('postId'); #post method
+$this->request->getQuery('postId'); #get method
+

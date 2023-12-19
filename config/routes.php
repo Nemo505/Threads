@@ -60,6 +60,8 @@ return function (RouteBuilder $routes): void {
         $builder->connect('/users', ['controller' => 'Users', 'action' => 'index']);
         $builder->connect('/users/threads', ['controller' => 'Threads', 'action' => 'index']);
         $builder->connect('/users/threads/like', ['controller' => 'Threads', 'action' => 'toggleLike']);
+        $builder->connect('/users/threads/comment', ['controller' => 'Threads', 'action' => 'toggleComment']);
+        $builder->connect('/users/threads/get-comments', ['controller' => 'Threads', 'action' => 'getComment']);
 
 
         /*
