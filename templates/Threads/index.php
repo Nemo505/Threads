@@ -150,12 +150,14 @@
             cache: false,
             success: function(response) {
                 if (response.length > 0) {
+                    var commentsArray = JSON.parse(response);
+
                     // Clear existing comments
                     var commentsContainer = document.getElementById('comments-container');
                     commentsContainer.innerHTML = '';
 
                     // Loop through comments and append them to the container
-                    response.forEach(function(comment) {
+                    commentsArray.forEach(function(comment) {
                         var commentHtml = `
                             <div class="bg-dark-100 text-white py-4 px-6">
                                 <div class="flex items-center">
