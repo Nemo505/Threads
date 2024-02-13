@@ -52,6 +52,16 @@ class ThreadsController extends AppController
         $postId = $this->request->getData('postId');
         
         $user = $this->Authentication->getIdentity();
+        $this->loadModel('Users');
+        $userinfo = $this->Users->get($user->id);
+        if ($userinfo->role == 'user') {
+
+            $this->Flash->error(__('You are not allowed to like this post'));
+            $response = ['error' => 'You are not allowed to like this post'];
+            echo json_encode($response);
+            return $this->redirect($this->referer());
+        }
+
         $userId = $user->get('id');
 
 

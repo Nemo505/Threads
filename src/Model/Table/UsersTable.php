@@ -11,6 +11,10 @@ use Cake\Validation\Validator;
 /**
  * Users Model
  *
+ * @property \App\Model\Table\CommentsTable&\Cake\ORM\Association\HasMany $Comments
+ * @property \App\Model\Table\LikesTable&\Cake\ORM\Association\HasMany $Likes
+ * @property \App\Model\Table\PostsTable&\Cake\ORM\Association\HasMany $Posts
+ *
  * @method \App\Model\Entity\User newEmptyEntity()
  * @method \App\Model\Entity\User newEntity(array $data, array $options = [])
  * @method \App\Model\Entity\User[] newEntities(array $data, array $options = [])
@@ -45,9 +49,15 @@ class UsersTable extends Table
 
         $this->addBehavior('Timestamp');
 
-        $this->hasMany('Posts');
-        $this->hasMany('Likes');
-        $this->hasMany('Comments');
+        $this->hasMany('Comments', [
+            'foreignKey' => 'user_id',
+        ]);
+        $this->hasMany('Likes', [
+            'foreignKey' => 'user_id',
+        ]);
+        $this->hasMany('Posts', [
+            'foreignKey' => 'user_id',
+        ]);
     }
 
     /**
@@ -65,7 +75,7 @@ class UsersTable extends Table
             ->notEmptyString('name');
 
         $validator
-            ->scalar('email')
+            ->email('email')
             ->requirePresence('email', 'create')
             ->notEmptyString('email');
 
@@ -75,7 +85,24 @@ class UsersTable extends Table
             ->requirePresence('password', 'create')
             ->notEmptyString('password');
 
+        $validator
+            ->scalar('role')
+            ->allowEmptyString('role');
+
         return $validator;
     }
-    
+
+    /**
+     * Returns a rules checker object that will be used for validating
+     * application integrity.
+     *
+     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
+     * @return \Cake\ORM\RulesChecker
+     */
+    public function buildRules(RulesChecker $rules): RulesChecker
+    {
+        $rules->add($rules->isUnique(['email']), ['errorField' => 'email']);
+
+        return $rules;
+    }
 }

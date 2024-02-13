@@ -31,6 +31,11 @@ class CreateUsers extends AbstractMigration
             'default' => null,
             'null' => false,
         ]);
+        $userTable->addColumn('role', 'enum', [
+            'values' => ['admin', 'user'], // Possible values for the role
+            'default' => 'user', // Default role is 'user'
+            'null' => false,
+        ]);
         $userTable->addColumn('created', 'datetime', [
             'default' => null,
             'null' => false,

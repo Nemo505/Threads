@@ -50,17 +50,28 @@ class PostsController extends AppController
     public function add()
     {
         $post = $this->Posts->newEmptyEntity();
-        if ($this->request->is('post')) {
-            $post = $this->Posts->patchEntity($post, $this->request->getData());
-            if ($this->Posts->save($post)) {
-                $this->Flash->success(__('The post has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
+        $user = $this->Authentication->getIdentity();
+        $this->loadModel('Users');
+        $userinfo = $this->Users->get($user->id);
+        if ($userinfo->role == 'user') {
+            $this->Flash->error(__('User Role cannot add the Post'));
+            return $this->redirect($this->referer());
+            
+        } else {
+            
+            if ($this->request->is('post')) {
+                $post = $this->Posts->patchEntity($post, $this->request->getData());
+                if ($this->Posts->save($post)) {
+                    $this->Flash->success(__('The post has been saved.'));
+    
+                    return $this->redirect(['action' => 'index']);
+                }
+                $this->Flash->error(__('The post could not be saved. Please, try again.'));
             }
-            $this->Flash->error(__('The post could not be saved. Please, try again.'));
+            $users = $this->Posts->Users->find('list', ['limit' => 200])->all();
+            $this->set(compact('post', 'users'));
         }
-        $users = $this->Posts->Users->find('list', ['limit' => 200])->all();
-        $this->set(compact('post', 'users'));
+        
     }
 
     /**

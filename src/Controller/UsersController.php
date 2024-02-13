@@ -11,31 +11,6 @@ namespace App\Controller;
  */
 class UsersController extends AppController
 {
-    public function login()
-    {
-        $result = $this->Authentication->getResult();
-        // If the user is logged in send them away.
-        if ($result->isValid()) {
-            $target = $this->Authentication->getLoginRedirect() ?? '/';
-            return $this->redirect($target);
-        }
-        if ($this->request->is('post')) {
-            $this->Flash->error('Invalid email or password');
-        }
-    }
-
-    public function beforeFilter(\Cake\Event\EventInterface $event)
-    {
-        parent::beforeFilter($event);
-
-        $this->Authentication->allowUnauthenticated(['login']);
-    }
-
-    public function logout()
-    {
-        $this->Authentication->logout();
-        return $this->redirect(['controller' => 'Users', 'action' => 'login']);
-    }
     /**
      * Index method
      *
@@ -58,7 +33,7 @@ class UsersController extends AppController
     public function view($id = null)
     {
         $user = $this->Users->get($id, [
-            'contain' => [],
+            'contain' => ['Posts', 'Likes', 'Comments'],
         ]);
 
         $this->set(compact('user'));
