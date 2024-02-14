@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 namespace App\Controller;
+use Cake\Http\Exception\ForbiddenException;
 
 /**
  * Posts Controller
@@ -18,6 +19,7 @@ class PostsController extends AppController
      */
     public function index()
     {
+        $this->Authorization->skipAuthorization();
         $this->paginate = [
             'contain' => ['Users'],
         ];
@@ -35,9 +37,17 @@ class PostsController extends AppController
      */
     public function view($id = null)
     {
+        // $this->Authorization->skipAuthorization();
         $post = $this->Posts->get($id, [
             'contain' => ['Users'],
         ]);
+
+        try {
+            $this->Authorization->authorize($post);
+        } catch (ForbiddenException $exception) {
+            $this->Flash->error('You are not authorized to perform this action.');
+            return $this->redirect(['controller' => 'Posts', 'action' => 'index']);
+        }
 
         $this->set(compact('post'));
     }
@@ -50,6 +60,7 @@ class PostsController extends AppController
     public function add()
     {
         $post = $this->Posts->newEmptyEntity();
+
         $user = $this->Authentication->getIdentity();
         $this->loadModel('Users');
         $userinfo = $this->Users->get($user->id);
@@ -82,10 +93,18 @@ class PostsController extends AppController
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function edit($id = null)
-    {
+    {   
         $post = $this->Posts->get($id, [
             'contain' => [],
         ]);
+        
+        try {
+            $this->Authorization->authorize($post);
+        } catch (ForbiddenException $exception) {
+            $this->Flash->error('You are not authorized to perform this action.');
+            return $this->redirect(['controller' => 'Posts', 'action' => 'index']);
+        }
+
         if ($this->request->is(['patch', 'post', 'put'])) {
             $post = $this->Posts->patchEntity($post, $this->request->getData());
             if ($this->Posts->save($post)) {
@@ -109,7 +128,16 @@ class PostsController extends AppController
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
+        
         $post = $this->Posts->get($id);
+
+        try {
+        $this->Authorization->authorize($post);
+        } catch (ForbiddenException $exception) {
+            $this->Flash->error('You are not authorized to perform this action.');
+            return $this->redirect(['controller' => 'Posts', 'action' => 'index']);
+        }
+
         if ($this->Posts->delete($post)) {
             $this->Flash->success(__('The post has been deleted.'));
         } else {

@@ -16,6 +16,7 @@ class ThreadsController extends AppController
      */
     public function index()
     {
+        $this->Authorization->skipAuthorization();
         // Load the Users model
         $this->loadModel('Posts');
 
