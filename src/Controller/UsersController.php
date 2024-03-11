@@ -76,15 +76,25 @@ class UsersController extends AppController
     public function add()
     {
         $this->Authorization->skipAuthorization();
-
         $user = $this->Users->newEmptyEntity();
+
         if ($this->request->is('post')) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
+
+
+            $uploadedFile = $this->request->getData('avatar');
+            if ($uploadedFile) {
+                $avatarName = uniqid() . '_' . $uploadedFile->getClientFilename();
+                $uploadedFile->moveTo(WWW_ROOT . 'img/avatar/' . $avatarName);
+                $user->avatar = 'img/avatar/' . $avatarName;
+            }
+
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
+
             $this->Flash->error(__('The user could not be saved. Please, try again.'));
         }
         $this->set(compact('user'));
@@ -105,6 +115,14 @@ class UsersController extends AppController
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
+
+            $uploadedFile = $this->request->getData('avatar');
+            if ($uploadedFile) {
+                $avatarName = uniqid() . '_' . $uploadedFile->getClientFilename();
+                $uploadedFile->moveTo(WWW_ROOT . 'img/avatar/' . $avatarName);
+                $user->avatar = 'img/avatar/' . $avatarName;
+            }
+
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
 
@@ -134,5 +152,32 @@ class UsersController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+
+    
+    public function downloadCSVReport()
+    {
+        $this->Authorization->skipAuthorization();
+        $this->autoRender = false;
+
+        $users = $this->Users->find()->toList();
+
+        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Disposition: attachment; filename=users-' . date("Y-m-d-h-i-s") . '.csv');
+        $output = fopen('php://output', 'w');
+
+        fputcsv($output, array('Id', 'Name', 'Email'));
+
+        if (count($users) > 0) {
+            foreach ($users as $user) {
+                $user_row = [
+                    $user['id'],
+                    ucfirst($user['name']),
+                    $user['email'],
+                ];
+
+                fputcsv($output, $user_row);
+            }
+        }
     }
 }

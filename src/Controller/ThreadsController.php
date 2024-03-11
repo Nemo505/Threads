@@ -47,21 +47,14 @@ class ThreadsController extends AppController
     }
 
     public function toggleLike() {
+        $this->Authorization->skipAuthorization();
+
         $this->autoRender = false;
         $this->request->allowMethod(['post']);
         
         $postId = $this->request->getData('postId');
         
         $user = $this->Authentication->getIdentity();
-        $this->loadModel('Users');
-        $userinfo = $this->Users->get($user->id);
-        if ($userinfo->role == 'user') {
-
-            $this->Flash->error(__('You are not allowed to like this post'));
-            $response = ['error' => 'You are not allowed to like this post'];
-            echo json_encode($response);
-            return $this->redirect($this->referer());
-        }
 
         $userId = $user->get('id');
 
@@ -95,6 +88,7 @@ class ThreadsController extends AppController
 
     public function toggleComment()
     {
+        $this->Authorization->skipAuthorization();
         $this->autoRender = false; 
         $this->request->allowMethod(['post']);
         $postId = $this->request->getData('post_id');
@@ -117,7 +111,8 @@ class ThreadsController extends AppController
     }
 
     public function getComment()
-    {
+    {   
+        $this->Authorization->skipAuthorization();
         $this->autoRender = false; 
         $this->request->allowMethod(['get']);
         $postId = $this->request->getQuery('postId');
@@ -136,6 +131,7 @@ class ThreadsController extends AppController
         foreach ($commentsArray as $comment) {
             $result[] = [
                 'id' => $comment->id,
+                'avatar' => $comment->user->avatar,
                 'content' => $comment->content,
                 'user_id' => $comment->user_id,
                 'user_name' => $comment->user->name, 

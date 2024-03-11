@@ -151,6 +151,7 @@
             success: function(response) {
                 if (response.length > 0) {
                     var commentsArray = JSON.parse(response);
+                    console.log(response);
 
                     // Clear existing comments
                     var commentsContainer = document.getElementById('comments-container');
@@ -161,13 +162,17 @@
                         var commentHtml = `
                             <div class="bg-dark-100 text-white py-4 px-6">
                                 <div class="flex items-center">
-                                    <img src="${comment.user_avatar}" alt="${comment.user_name} Avatar" class="h-10 w-10 rounded-full mr-3 border-2 border-white" />
-                                    <h6 class="text-lg font-semibold text-black">${comment.user_name}</h6>
+                                    <img src="${window.location.origin}/${comment.avatar}" alt="${comment.user_name} Avatar" class="h-10 w-10 rounded-full mr-3 border-2 border-white" />
+                                    <h6 class="text-lg font-semibold text-black">@${comment.user_name}</h6>
                                 </div>
-                                <p class="text-gray-600 dark:text-gray-300">${comment.content}</p>
-                                <div class="flex items-center mt-4 space-x-4">
-                                    <span class="cursor-pointer" onclick="toggleLike(this, ${comment.id})"><i class="fa-solid fa-thumbs-up text-blue-500"></i> Like</span>
-                                    <span class="cursor-pointer"><i class="fa-regular fa-comment text-gray-500"></i> Reply</span>
+                                <p class="text-gray-600 dark:text-gray-300 " style="font-size: small; margin-left: 30px; margin-top: 10px;">${comment.content}</p>
+                                <div class="flex items-center">
+                                    <div class="cursor-pointer" onclick="toggleLike(this, ${comment.id})">
+                                        <i class="fa-solid fa-thumbs-up text-blue-500"></i> Like
+                                    </div>
+                                    <div class="cursor-pointer">
+                                        <i class="fa-regular fa-comment text-gray-500"></i> Reply
+                                    </div>
                                 </div>
                             </div>
                         `;

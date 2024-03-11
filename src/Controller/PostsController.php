@@ -37,7 +37,7 @@ class PostsController extends AppController
      */
     public function view($id = null)
     {
-        // $this->Authorization->skipAuthorization();
+        $this->Authorization->skipAuthorization();
         $post = $this->Posts->get($id, [
             'contain' => ['Users'],
         ]);

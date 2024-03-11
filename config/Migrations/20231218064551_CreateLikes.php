@@ -20,8 +20,8 @@ class CreateLikes extends AbstractMigration
             'null' => true,
         ]);
         $likeTable->addForeignKey('user_id', 'users', 'id', [
-            'delete' => 'SET_NULL', // Define behavior on DELETE
-            'update' => 'CASCADE', // Define behavior on UPDATE
+            'delete' => 'SET_NULL', 
+            'update' => 'CASCADE',
         ]);
 
         $likeTable->addColumn('post_id', 'integer', [

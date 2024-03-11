@@ -15,10 +15,11 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenTime $created
  * @property \Cake\I18n\FrozenTime $modified
  * @property string|null $role
+ * @property string|null $avatar
  *
- * @property \App\Model\Entity\Post[] $posts
- * @property \App\Model\Entity\Like[] $likes
  * @property \App\Model\Entity\Comment[] $comments
+ * @property \App\Model\Entity\Like[] $likes
+ * @property \App\Model\Entity\Post[] $posts
  */
 class User extends Entity
 {
@@ -38,9 +39,10 @@ class User extends Entity
         'created' => true,
         'modified' => true,
         'role' => true,
-        'posts' => true,
-        'likes' => true,
+        'avatar' => true,
         'comments' => true,
+        'likes' => true,
+        'posts' => true,
     ];
 
     /**

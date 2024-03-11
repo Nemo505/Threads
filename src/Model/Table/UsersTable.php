@@ -89,6 +89,11 @@ class UsersTable extends Table
             ->scalar('role')
             ->allowEmptyString('role');
 
+        $validator
+            ->scalar('avatar')
+            ->maxLength('avatar', 255)
+            ->allowEmptyString('avatar');
+
         return $validator;
     }
 
