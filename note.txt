@@ -75,3 +75,11 @@ _________________________________________________
 $this->request->getData('postId'); #post method
 $this->request->getQuery('postId'); #get method
 
+instead of loadModel, 
+        $usersTable = $this->getTableLocator()->get('Users');
+        $users = $usersTable->find()->all();
+
+__________
+active users
+    
+

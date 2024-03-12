@@ -18,16 +18,26 @@ class ThreadsController extends AppController
     {
         $this->Authorization->skipAuthorization();
         // Load the Users model
-        $this->loadModel('Posts');
+        $usersTable = $this->getTableLocator()->get('Users');
+        $activeUsersTable = $this->getTableLocator()->get('ActiveUsers');
 
-        $posts = $this->Posts->find()
+        //active users along with their status from the Users table
+        $activeUsers = $usersTable->find()
+        ->innerJoinWith('ActiveUsers', function ($query) {
+            return $query->where(['ActiveUsers.user_id = Users.id']);
+        })
+            ->select(['Users.name', 'Users.avatar', 'ActiveUsers.status', 'ActiveUsers.modified'])
+            ->all();
+
+        $postsTable = $this->getTableLocator()->get('Posts');
+        $posts = $postsTable->find()
             ->contain(['Users'])
             ->order(['posts.created' => 'DESC']);
         
         $user = $this->Authentication->getIdentity();
         $userId = $user->get('id');
 
-        $this->set(compact('posts', 'userId'));
+        $this->set(compact('posts', 'userId', 'user', 'activeUsers'));
     }
 
     /**

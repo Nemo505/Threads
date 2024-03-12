@@ -17,6 +17,19 @@ class UsersController extends AppController
         $result = $this->Authentication->getResult();
         // If the user is logged in send them away.
         if ($result->isValid()) {
+
+            //update active status
+            $userId = $result->getData()->id;
+            $activeUsersTable = $this->getTableLocator()->get('ActiveUsers');
+
+            $activeUser = $activeUsersTable->find()
+                        ->where(['user_id' => $userId])
+                        ->first();
+            if ($activeUser) {
+                $activeUser->status = 'active';
+                $activeUsersTable->save($activeUser);
+            }
+
             $target = $this->Authentication->getLoginRedirect() ?? '/';
             return $this->redirect($target);
         }
@@ -35,6 +48,17 @@ class UsersController extends AppController
     public function logout()
     {
         $this->Authorization->skipAuthorization();
+        $userId = $this->Authentication->getIdentity()->id;
+        $activeUsersTable = $this->getTableLocator()->get('ActiveUsers');
+
+        $activeUser = $activeUsersTable->find()
+            ->where(['user_id' => $userId])
+            ->first();
+        if ($activeUser) {
+            $activeUser->status = 'inactive';
+            $activeUsersTable->save($activeUser);
+        }
+
         $this->Authentication->logout();
         return $this->redirect(['controller' => 'Users', 'action' => 'login']);
     }

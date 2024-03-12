@@ -58,6 +58,10 @@ class UsersTable extends Table
         $this->hasMany('Posts', [
             'foreignKey' => 'user_id',
         ]);
+        $this->hasOne('ActiveUsers', [
+            'foreignKey' => 'user_id',
+        ]);
+
     }
 
     /**
